@@ -60,5 +60,11 @@ namespace EDStatus.UserControls
             set { txtOff.Text = value; }
         }
 
+        public bool Checked
+        {
+            get { return checkBox1.Checked; }
+            set { checkBox1.Checked = value; }
+        }
+
     }
 }

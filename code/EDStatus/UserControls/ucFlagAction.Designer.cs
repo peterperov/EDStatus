@@ -108,7 +108,7 @@ namespace EDStatus.UserControls
             this.Controls.Add(this.txtLED);
             this.Controls.Add(this.checkBox1);
             this.Name = "ucFlagAction";
-            this.Size = new System.Drawing.Size(747, 38);
+            this.Size = new System.Drawing.Size(747, 36);
             this.ResumeLayout(false);
             this.PerformLayout();
 

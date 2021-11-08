@@ -31,6 +31,8 @@ namespace EDStatus
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmdEnable = new System.Windows.Forms.Button();
+            this.cmdTestFlags = new System.Windows.Forms.Button();
             this.cmdTest = new System.Windows.Forms.Button();
             this.txtPID = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -41,15 +43,19 @@ namespace EDStatus
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ucNightVision = new EDStatus.UserControls.ucFlagAction();
+            this.ucCargoScoop = new EDStatus.UserControls.ucFlagAction();
+            this.ucLights = new EDStatus.UserControls.ucFlagAction();
             this.ucLandingGearDown = new EDStatus.UserControls.ucFlagAction();
-            this.cmdTestFlags = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ucFlightAssist = new EDStatus.UserControls.ucFlagAction();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmdEnable);
             this.groupBox1.Controls.Add(this.cmdTestFlags);
             this.groupBox1.Controls.Add(this.cmdTest);
             this.groupBox1.Controls.Add(this.txtPID);
@@ -67,9 +73,29 @@ namespace EDStatus
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configs";
             // 
+            // cmdEnable
+            // 
+            this.cmdEnable.Location = new System.Drawing.Point(985, 33);
+            this.cmdEnable.Name = "cmdEnable";
+            this.cmdEnable.Size = new System.Drawing.Size(151, 115);
+            this.cmdEnable.TabIndex = 10;
+            this.cmdEnable.Text = "Enable";
+            this.cmdEnable.UseVisualStyleBackColor = true;
+            this.cmdEnable.Click += new System.EventHandler(this.cmdEnable_Click);
+            // 
+            // cmdTestFlags
+            // 
+            this.cmdTestFlags.Location = new System.Drawing.Point(803, 114);
+            this.cmdTestFlags.Name = "cmdTestFlags";
+            this.cmdTestFlags.Size = new System.Drawing.Size(130, 35);
+            this.cmdTestFlags.TabIndex = 9;
+            this.cmdTestFlags.Text = "TestFlags";
+            this.cmdTestFlags.UseVisualStyleBackColor = true;
+            this.cmdTestFlags.Click += new System.EventHandler(this.cmdTestFlags_Click);
+            // 
             // cmdTest
             // 
-            this.cmdTest.Location = new System.Drawing.Point(873, 39);
+            this.cmdTest.Location = new System.Drawing.Point(803, 37);
             this.cmdTest.Name = "cmdTest";
             this.cmdTest.Size = new System.Drawing.Size(130, 35);
             this.cmdTest.TabIndex = 8;
@@ -117,7 +143,7 @@ namespace EDStatus
             this.txtVirLed.Name = "txtVirLed";
             this.txtVirLed.Size = new System.Drawing.Size(652, 31);
             this.txtVirLed.TabIndex = 3;
-            this.txtVirLed.Text = "C:\\Program Files (x86)\\VPC Software Suite\\tools>VPC_LED_Control.exe";
+            this.txtVirLed.Text = "C:\\Program Files (x86)\\VPC Software Suite\\tools\\VPC_LED_Control.exe";
             // 
             // label2
             // 
@@ -147,6 +173,9 @@ namespace EDStatus
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.ucNightVision);
+            this.groupBox2.Controls.Add(this.ucCargoScoop);
+            this.groupBox2.Controls.Add(this.ucLights);
             this.groupBox2.Controls.Add(this.ucLandingGearDown);
             this.groupBox2.Location = new System.Drawing.Point(12, 186);
             this.groupBox2.Name = "groupBox2";
@@ -155,38 +184,82 @@ namespace EDStatus
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Flags";
             // 
-            // timer1
+            // ucNightVision
             // 
-            this.timer1.Interval = 200;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.ucNightVision.Checked = false;
+            this.ucNightVision.FlagName = "Night Vision";
+            this.ucNightVision.FlagValue = false;
+            this.ucNightVision.LED = "09";
+            this.ucNightVision.Location = new System.Drawing.Point(18, 202);
+            this.ucNightVision.Name = "ucNightVision";
+            this.ucNightVision.OFF = "00 00 00";
+            this.ucNightVision.ON = "00 00 40";
+            this.ucNightVision.Size = new System.Drawing.Size(753, 38);
+            this.ucNightVision.TabIndex = 4;
+            // 
+            // ucCargoScoop
+            // 
+            this.ucCargoScoop.Checked = false;
+            this.ucCargoScoop.FlagName = "Cargo Scoop";
+            this.ucCargoScoop.FlagValue = false;
+            this.ucCargoScoop.LED = "08";
+            this.ucCargoScoop.Location = new System.Drawing.Point(18, 161);
+            this.ucCargoScoop.Name = "ucCargoScoop";
+            this.ucCargoScoop.OFF = "00 00 00";
+            this.ucCargoScoop.ON = "40 00 40";
+            this.ucCargoScoop.Size = new System.Drawing.Size(753, 38);
+            this.ucCargoScoop.TabIndex = 3;
+            // 
+            // ucLights
+            // 
+            this.ucLights.Checked = false;
+            this.ucLights.FlagName = "Lights";
+            this.ucLights.FlagValue = false;
+            this.ucLights.LED = "07";
+            this.ucLights.Location = new System.Drawing.Point(18, 117);
+            this.ucLights.Name = "ucLights";
+            this.ucLights.OFF = "00 00 00";
+            this.ucLights.ON = "80 80 00";
+            this.ucLights.Size = new System.Drawing.Size(753, 38);
+            this.ucLights.TabIndex = 2;
             // 
             // ucLandingGearDown
             // 
+            this.ucLandingGearDown.Checked = false;
             this.ucLandingGearDown.FlagName = "LandingGearDown";
             this.ucLandingGearDown.FlagValue = false;
             this.ucLandingGearDown.LED = "05";
             this.ucLandingGearDown.Location = new System.Drawing.Point(18, 31);
             this.ucLandingGearDown.Name = "ucLandingGearDown";
             this.ucLandingGearDown.OFF = "00 00 00";
-            this.ucLandingGearDown.ON = "00 FF 00";
+            this.ucLandingGearDown.ON = "00 40 00";
             this.ucLandingGearDown.Size = new System.Drawing.Size(753, 37);
             this.ucLandingGearDown.TabIndex = 0;
             // 
-            // cmdTestFlags
+            // timer1
             // 
-            this.cmdTestFlags.Location = new System.Drawing.Point(873, 114);
-            this.cmdTestFlags.Name = "cmdTestFlags";
-            this.cmdTestFlags.Size = new System.Drawing.Size(130, 35);
-            this.cmdTestFlags.TabIndex = 9;
-            this.cmdTestFlags.Text = "TestFlags";
-            this.cmdTestFlags.UseVisualStyleBackColor = true;
-            this.cmdTestFlags.Click += new System.EventHandler(this.cmdTestFlags_Click);
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // ucFlightAssist
+            // 
+            this.ucFlightAssist.Checked = false;
+            this.ucFlightAssist.FlagName = "FlightAssist";
+            this.ucFlightAssist.FlagValue = false;
+            this.ucFlightAssist.LED = "06";
+            this.ucFlightAssist.Location = new System.Drawing.Point(30, 260);
+            this.ucFlightAssist.Name = "ucFlightAssist";
+            this.ucFlightAssist.OFF = "00 00 00";
+            this.ucFlightAssist.ON = "80 80 00";
+            this.ucFlightAssist.Size = new System.Drawing.Size(753, 37);
+            this.ucFlightAssist.TabIndex = 1;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1510, 826);
+            this.Controls.Add(this.ucFlightAssist);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
@@ -214,6 +287,11 @@ namespace EDStatus
         private System.Windows.Forms.Button cmdTest;
         private UserControls.ucFlagAction ucLandingGearDown;
         private System.Windows.Forms.Button cmdTestFlags;
+        private UserControls.ucFlagAction ucFlightAssist;
+        private UserControls.ucFlagAction ucCargoScoop;
+        private UserControls.ucFlagAction ucLights;
+        private UserControls.ucFlagAction ucNightVision;
+        private System.Windows.Forms.Button cmdEnable;
     }
 }
 

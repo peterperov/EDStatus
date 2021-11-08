@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 namespace EDStatus
 {
 
+
+    /*
+     * 
+     * https://stackoverflow.com/questions/19582477/combining-enum-values-with-bit-flags
+     * 
+     */
+
     /*
 
 https://elite-journal.readthedocs.io/en/latest/Status%20File/
@@ -22,6 +29,12 @@ https://elite-journal.readthedocs.io/en/latest/Status%20File/
 15	32768	0000 8000	Srv DriveAssist
 28	268435456	1000 0000	Night Vision
 31	2147483648	8000 0000	srvHighBeam 
+
+
+    ucFlightAssist
+    ucLights
+    ucCargoScoop
+    ucNightVision
 
  * */
 
