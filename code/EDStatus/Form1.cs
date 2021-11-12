@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VLEDCONTROL;
 
 namespace EDStatus
 {
@@ -28,15 +29,15 @@ namespace EDStatus
 
         private readonly object _lock = new object();
 
-        List<string> _commands = new List<string>(); 
+        List<string> _commands = new List<string>();
+
+        Dictionary<string, bool> _prevValues = new Dictionary<string, bool>(); 
 
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             // fires on a tick
-
             var statusFile = new FileInfo(txtStatus.Text);
-
             if (statusFile.LastWriteTimeUtc == _lastAccess) return; 
 
             lock(_lock)
@@ -81,22 +82,16 @@ namespace EDStatus
         {
             Debug.WriteLine("Testing");
 
-            int i = 1;
-            int mask = 2;
-
-            Debug.WriteLine("{0}", i & mask);
+            FlagValues i = (FlagValues) 63;
 
 
-            Debug.WriteLine("{0}", 101 & 1);
+            Debug.WriteLine("Docked {0}", i.HasFlag(FlagValues.Docked)); 
+            Debug.WriteLine("Landed {0}", i.HasFlag(FlagValues.Landed)); 
+            Debug.WriteLine("LandingGearDown {0}", i.HasFlag(FlagValues.LandingGearDown)); 
+            Debug.WriteLine("ShieldsUp {0}", i.HasFlag(FlagValues.ShieldsUp)); 
 
-            var o = 101 & 1;
 
-            Debug.WriteLine(o.ToString());
 
-            Debug.WriteLine("101 & 8 {0}", 101 & 8);
-            Debug.WriteLine("101 & 16 {0}", 101 & 16);
-            Debug.WriteLine("101 & 32 {0}", 101 & 32);
-            Debug.WriteLine("101 & 64 {0}", 101 & 64);
 
         }
 
@@ -109,36 +104,52 @@ namespace EDStatus
         private List<string> GenerateCommands()
         {
             var list = new List<string>();
-            string str;
 
-            // ucLandingGearDown
-            list.Add(string.Format("{0} {1} {2}", txtVid.Text, txtPID.Text, GetControlValue(ucLandingGearDown)));
+            
 
-            // ucFlightAssist
-            list.Add(string.Format("{0} {1} {2}", txtVid.Text, txtPID.Text, GetControlValue(ucFlightAssist)));
-
-            // ucLights
-            list.Add(string.Format("{0} {1} {2}", txtVid.Text, txtPID.Text, GetControlValue(ucLights)));
-
-            // ucCargoScoop
-            list.Add(string.Format("{0} {1} {2}", txtVid.Text, txtPID.Text, GetControlValue(ucCargoScoop)));
-
-            // ucNightVision
-            list.Add(string.Format("{0} {1} {2}", txtVid.Text, txtPID.Text, GetControlValue(ucNightVision)));
-
-
+            list.AddRange(GetControlValue(ucLandingGearDown)); 
+            list.AddRange(GetControlValue(ucFlightAssist)); 
+            list.AddRange(GetControlValue(ucLights)); 
+            list.AddRange(GetControlValue(ucCargoScoop)); 
+            list.AddRange(GetControlValue(ucNightVision)); 
 
             return list; 
 
         }
 
-        private string GetControlValue( ucFlagAction ctl)
+        private List<string> GetControlValue( ucFlagAction ctl)
         {
 
+            var list = new List<string>();
+            var leds = ctl.LED;
 
+            // sanity 
+            if (string.IsNullOrEmpty(leds)) return list;
 
+            // check with prev value 
+            var key = ctl.FlagName;
+            var val = ctl.Checked;
 
-            return string.Format("{0} {1}", ctl.LED, ctl.Checked ? ctl.ON : ctl.OFF);
+            if (!_prevValues.ContainsKey(key))
+            {
+                // opposite so that initial update always fires 
+                _prevValues[key] = !val;
+            }
+
+            if ( _prevValues[key] != val)
+            {
+                foreach (var led in leds.Split(','))
+                {
+                    // 
+                    list.Add(string.Format("{0} {1} {2} {3}", txtVid.Text, txtPID.Text,
+                        led, ctl.Checked ? ctl.ON : ctl.OFF));
+                }
+            }
+
+            // save prev value
+            _prevValues[key] = ctl.Checked; 
+
+            return list; 
         }
 
 
@@ -167,6 +178,22 @@ namespace EDStatus
                 timer1.Enabled = false;
                 cmdEnable.Text = "Enable";
             }
+        }
+
+        private void cmdTestDirect_Click(object sender, EventArgs e)
+        {
+            // testing direct communication 
+
+            var device = new VirpilDevice("control panel #2", "3344", "025B");
+            var color = new LedColor(64, 64, 64);
+
+            device.SendCommand(9, color); 
+
+        }
+
+        private void cmdWatcher_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

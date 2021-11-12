@@ -44,6 +44,8 @@ https://elite-journal.readthedocs.io/en/latest/Status%20File/
     [Flags]
     public enum FlagValues : uint
     {
+        Docked = 1,
+        Landed = 2,
         LandingGearDown = 4,
         ShieldsUp = 8,
         Supercruise = 16,
@@ -51,8 +53,16 @@ https://elite-journal.readthedocs.io/en/latest/Status%20File/
         HardpointsDeployed = 64,
         LightsOn = 256,
         CargoScoopDeployed = 512,
+        SilentRunning = 1024,
+        ScoopingFuel = 2048,
         SrvHandbrake = 4096,
         SrvDriveAssist = 32768,
+        FsdMassLocked = 65536,
+        FsdCharging = 131072,
+        FsdCooldown = 262144,
+        OverHeating = 1048576,
+        IsInDanger = 4194304,
+        BeingInterdicted = 8388608,
         NightVision = 268435456,
         srvHighBeam = 2147483648
     }
@@ -70,6 +80,8 @@ https://elite-journal.readthedocs.io/en/latest/Status%20File/
             {
                 _number = 0; 
             }
+
+            
 
         }
 
